@@ -1,0 +1,37 @@
+#!/usr/bin/env python3
+# coding: utf-8
+
+
+
+
+import  argparse
+import yaml
+
+from  pismforcing import main_index_forcing_file
+
+
+if __name__ == "__main__":
+    # get the yaml file
+    parser = argparse.ArgumentParser(description='coupling functions with yaml config')
+    parser.add_argument('fyaml',type=str, help='Input the yaml file')
+    parser.add_argument("theyear", type=int, help='Input the chosen year, integer.')
+    parser.add_argument("thepismfile", type=str, help='Input the current PISM output file.')
+
+    arguments = parser.parse_args()
+    print("..... the yaml file: ", arguments.fyaml)
+    print("..... the chosen  year: ", arguments.theyear)
+    print("..... the PISM file: ", arguments.thepismfile)
+    print("\n")
+
+
+    # open yaml file
+    with open(arguments.fyaml ,'r') as f:
+        data = yaml.load(f,Loader=yaml.FullLoader)
+        print(data)
+
+        for cc, opts in data.items():
+            if cc == 'IndexForcing':
+                fatmos, focean = main_index_forcing_file(arguments.theyear, arguments.thepismfile, **opts)
+                print(fatmos,focean)
+
+    f.close()
