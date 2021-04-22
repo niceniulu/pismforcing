@@ -1,0 +1,16 @@
+FESOM2ice:
+    fintimes: [2030 ]   #[2030, 2031]
+    ntimeperfile: 1  
+    version_FESOM: 2.0
+    meshpath: "/home/ollie/lniu/pool/AWICM-2.0/meshes/mesh_CORE2_finaltopo_mean/"
+    abg: [50, 15, -90]
+    fout: "FESOM_for_ice.nc"
+    ntimemean: 1
+    timestartout: [2030,12,31,0,0] 
+    dtout: 1 
+    dtoutunit: 'years'
+    depthmax: 400.
+    depthmean: False
+    ifrawfesom: False
+    fnameonly: fesom.2000.ocean.nc
+    ifverbose: False

@@ -1,0 +1,9 @@
+ocean2PISM:
+    fin: 'FESOM_for_ice.nc'
+    ficegrid: './pismr_nhem_20km.griddes' 
+    fout: 'ocean_for_PISM.nc'
+    switch_PISM: 'th' #'pico'
+    version_PISM:  1.2
+    fpicobasin: '/home/ollie/lniu/projects/smallwork/7_fesom2pism/basins/Basins_NH_20km_for_PICO.nc'
+
+    
