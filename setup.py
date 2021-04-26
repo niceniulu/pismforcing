@@ -6,7 +6,7 @@ with open("README.md", "r", encoding="utf-8") as fh:
 
 setuptools.setup(
     name="pismforcing", # Replace with your own username
-    version="0.0.1",
+    version="0.0.2",
     author="Lu Niu",
     author_email="lu.niu@awi.de",
     description="A small example package",
