@@ -1,0 +1,76 @@
+#!/usr/bin/env python3
+# coding: utf-8
+
+
+
+
+import  argparse, os
+import yaml
+
+from  pismforcing import select_vars_for_PISM, downscale_ECHAM2PISMgrids, run_dEBM, generate_atmos_forcing_for_PISM
+
+
+if __name__ == "__main__":
+    # get the yaml file
+    parser = argparse.ArgumentParser(description='generating PISM atmos forcing file from echam6')
+    parser.add_argument('file_echam6',type=str, help='The origional echam file')
+    parser.add_argument('pism_smb_scheme',type=str, help='the SMB scheme: PDD/dEBM')
+    parser.add_argument('pism_grids',type=str, help='the PISM grid file')
+    parser.add_argument('pism_current',type=str, help='the PISM topg file')
+
+    parser.add_argument('--file_output',type=str, default='atmosphere_forcing_for_PISM.nc', help='The output file')
+    parser.add_argument('--downscaleT',type=str, default='linear', help='downscale method for Temperature: No/linear')
+    parser.add_argument('--downscaleP',type=str, default='desertification', help='downscale method for Precipitation: No/desertification')
+    parser.add_argument('--factorT',type=float, default=-5, help='temperature lapse rate K/km')
+    parser.add_argument('--obliquity',type=float, help='obliquity, need to be set with dEBM')
+    parser.add_argument('--binary_dEBM',type=str, default='/home/ollie/lniu/projects/smallwork/6_dEBM/dEBM/Fortran-v1.0/dEBMmain', help='dEBM binary path')
+
+
+
+
+    arguments = parser.parse_args()
+    print(arguments)
+
+
+    file_echam6 = arguments.file_echam6
+    pism_smb_scheme = arguments.pism_smb_scheme
+    pism_grids = arguments.pism_grids
+    pism_current = arguments.pism_current
+
+    downscaleT = arguments.downscaleT    #'linear' # None
+    downscaleP = arguments.downscaleP   #'desertification'
+    factorT = arguments.factorT
+    obliquity = arguments.obliquity
+    binary_dEBM = arguments.binary_dEBM
+    file_output = arguments.file_output
+
+    # choose variables
+    select_vars_for_PISM(fin=file_echam6, schemeSMB=pism_smb_scheme, lakestore=False, fout='select_ECHAM6.nc')
+
+    # downscale variables
+    downscale_ECHAM2PISMgrids(fecham='select_ECHAM6.nc',
+                                  fpismgrid=pism_grids,
+                                  fpismcurrent=pism_current,
+                                  interpmethod='bil' ,
+                                  downscaleT=downscaleT, factorT=factorT,
+                                  downscaleP=downscaleP, factorP=None,
+                                  fout='downscaled.nc' )
+
+    #-----------------------------------
+    # generate the forcing file for PISM
+    if pism_smb_scheme == 'dEBM':
+        print("-       Run binary dEBM for surface mass balance. | output: surface_mass_balance.nc ")
+        run_dEBM(fin='downscaled.nc',obliquity=obliquity, exedEBM=binary_dEBM)
+        #
+        print("-       Make atmosphere forcing file for PISM.  ")
+        generate_atmos_forcing_for_PISM(fin='downscaled.nc',fout=file_output,scheme='dEBM',
+                                        fileplus1='surface_mass_balance.nc',timefreq = "12month",lakestore=False)
+
+        print("        Done. need to set PISM switch: -surface given  ")
+    elif pism_smb_scheme == 'PDD':
+        print("-       Make atmosphere forcing file for PISM.  ")
+        generate_atmos_forcing_for_PISM(fin='downscaled.nc',fout=file_output,scheme='PDD',
+                                        fileplus1=None,timefreq = "12month")
+        print("       Done. need to set PISM switch: -atmophere given  -surface pdd ")
+    else:
+        raise ValueError(" unknown surface mass balance scheme.  ")
