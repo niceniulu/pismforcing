@@ -18,12 +18,12 @@ if __name__ == "__main__":
     parser.add_argument('pism_grids',type=str, help='the PISM grid file')
     parser.add_argument('pism_current',type=str, help='the PISM topg file')
 
-    parser.add_argument('--file_output',type=str, default='atmosphere_forcing_for_PISM.nc', help='The output file')
-    parser.add_argument('--downscaleT',type=str, default='linear', help='downscale method for Temperature: No/linear')
-    parser.add_argument('--downscaleP',type=str, default='desertification', help='downscale method for Precipitation: No/desertification')
-    parser.add_argument('--factorT',type=float, default=-5, help='temperature lapse rate K/km')
+    parser.add_argument('--file_output',type=str, default='atmosphere_forcing_for_PISM.nc', help='The output file, default: atmospehre_forcing_for_PISM.nc')
+    parser.add_argument('--downscaleT',type=str, default='linear', help='downscale method for Temperature: No/linear, defaut:linear')
+    parser.add_argument('--downscaleP',type=str, default='desertification', help='downscale method for Precipitation: No/desertification, default:desertification')
+    parser.add_argument('--factorT',type=float, default=-5, help='temperature lapse rate K/km, default:-5')
     parser.add_argument('--obliquity',type=float, help='obliquity, need to be set with dEBM')
-    parser.add_argument('--binary_dEBM',type=str, default='/home/ollie/lniu/projects/smallwork/6_dEBM/dEBM/Fortran-v1.0/dEBMmain', help='dEBM binary path')
+    parser.add_argument('--binary_dEBM',type=str, default='/home/ollie/lniu/projects/smallwork/6_dEBM/dEBM/Fortran-v1.0/dEBMmain', help='dEBM binary path,defaut:olliepath')
 
 
 
@@ -74,3 +74,5 @@ if __name__ == "__main__":
         print("       Done. need to set PISM switch: -atmophere given  -surface pdd ")
     else:
         raise ValueError(" unknown surface mass balance scheme.  ")
+
+    os.system("rm  select_ECHAM6.nc  surface_mass_balance.nc  downscaled.nc  namelist.debm  restart_debm.nc ")

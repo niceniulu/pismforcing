@@ -1,0 +1,66 @@
+#!/usr/bin/env python3
+# coding: utf-8
+
+
+
+
+import  argparse, os
+import yaml
+
+from  pismforcing import function_FESOM2ice, function_ocean2PISM, function_ocean_landmask
+
+
+if __name__ == "__main__":
+    # get the yaml file
+    parser = argparse.ArgumentParser(description='generating PISM atmos forcing file from echam6')
+    parser.add_argument('mesh_path',type=str, help='The mesh path')
+    parser.add_argument('fesom_file_dir',type=str, help='the fesom file directory')
+    parser.add_argument('fesom_file_name',type=str, help='the fesom file name')
+    parser.add_argument('pism_grids',type=str, help='the PISM grid file')
+
+    parser.add_argument('--file_output',type=str, default='ocean_file_for_pism.nc', help='The output file, default: ocean_file_for_pism.nc')
+    parser.add_argument('--alpha',type=float, default=50, help='mesh alpha, default:50')
+    parser.add_argument('--beta',type=float, default=15, help='mesh beta, default:15')
+    parser.add_argument('--gamma',type=float, default=-90, help='mesh gamma, default: -90')
+    parser.add_argument('--depthmax',type=float, default=400, help='max depth, default:400')
+    parser.add_argument('--depthmin',type=float, default=100, help='min depth, default:100')
+    parser.add_argument('--ocean_scheme',type=str, default='th', help='th or pico, default:th')
+    parser.add_argument('--file_pico_basin',type=str, default=None, help='pico basin file for pico, default:None')
+    parser.add_argument('--file_slm',type=str, default=None, help='slm file in echam6 grid, default: None')
+    #
+    #
+    #
+    arguments = parser.parse_args()
+    print(arguments)
+    mesh_path = arguments.mesh_path  #'/home/ollie/lniu/pool/AWICM-2.0/meshes/mesh_CORE2_finaltopo_mean/'
+    fesom_file_dir = arguments.fesom_file_dir  #'../'
+    fesom_file_name = arguments.fesom_file_name  # '11k_Flatice_fesom.nc'
+    pism_grid = arguments.pism_grids  #'pismr_nhem_20km.griddes'
+
+    file_output = arguments.file_output
+
+    abg = [arguments.alpha, arguments.beta, arguments.gamma ]  #[50, 15, -90]
+
+    depthmax = arguments.depthmax
+    depthmin = arguments.depthmin
+
+    ocean_scheme = arguments.ocean_scheme  #'th'  #'pico'
+    file_pico_basin = arguments.file_pico_basin # None
+    file_slm =  arguments.file_slm  #'slm.nc'
+
+
+    function_FESOM2ice(fintimes=[0000,], ntimeperfile=1, version_FESOM=2.0,
+                meshpath=mesh_path , abg=abg,
+                findir=fesom_file_dir, fout='ocean_file_for_ice.nc',
+                ntimemean=1, timestartout=[1950,12,31,0,0], dtout=1 ,dtoutunit='years',
+                depthmax=depthmax, depthmin=depthmin, depthmean=False,
+                ifrawfesom=False, fnameonly=fesom_file_name )
+
+    function_ocean2PISM(fin='ocean_file_for_ice.nc',ficegrid=pism_grid, fout=file_output,
+                switch_PISM=ocean_scheme, version_PISM=1.2,fpicobasin=file_pico_basin , interpmethod='nn')
+
+    if  arguments.file_slm is not None:
+        print("-    apply a mask over land and smooth")
+        function_ocean_landmask(finout=file_output, fslm2d=file_slm, fgriddes=pism_grid)
+
+    os.system("rm  ocean_file_for_ice.nc")
