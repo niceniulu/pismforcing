@@ -67,6 +67,8 @@ if __name__ == "__main__":
                                         fileplus1='surface_mass_balance.nc',timefreq = "12month",lakestore=False)
 
         print("        Done. need to set PISM switch: -surface given  ")
+        os.system("rm  select_ECHAM6.nc  surface_mass_balance.nc  downscaled.nc  namelist.debm  restart_debm.nc ")
+        
     elif pism_smb_scheme == 'PDD':
         print("-       Make atmosphere forcing file for PISM.  ")
         generate_atmos_forcing_for_PISM(fin='downscaled.nc',fout=file_output,scheme='PDD',
@@ -74,5 +76,3 @@ if __name__ == "__main__":
         print("       Done. need to set PISM switch: -atmophere given  -surface pdd ")
     else:
         raise ValueError(" unknown surface mass balance scheme.  ")
-
-    os.system("rm  select_ECHAM6.nc  surface_mass_balance.nc  downscaled.nc  namelist.debm  restart_debm.nc ")
