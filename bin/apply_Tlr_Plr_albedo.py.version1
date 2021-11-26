@@ -21,7 +21,6 @@ def  lapserate_albedo_correction(fclimate,
     # read climate fields:
     ff = nc.Dataset(fclimate, 'r')
     temp2 = ff.variables['air_temp'][:]
-    temp2_unit = ff.variables['air_temp'].units
     precip = ff.variables['precipitation'][:]
     ff.close()
 
@@ -72,14 +71,8 @@ def  lapserate_albedo_correction(fclimate,
     #------------------------------
     if  if_albedo :
         print("    apply albedo correction")
-        print("The air_temp unit:", temp2_unit)
-        if temp2_unit in ['K','Kelvin']:
-            T_thresh = 273.15
-        elif  temp2_unit in ['degC']:
-            T_thresh = 0.
-
-        condition = (thk>1.) & (T_downscaled > T_thresh) # where there is ice, and tempearute > 0.
-        T_downscaled = np.where( condition , T_thresh , T_downscaled )
+        condition = (thk>1.) & (T_downscaled > 0.) # where there is ice, and tempearute > 0.
+        T_downscaled = np.where( condition , 0. , T_downscaled )
 
     #
     #------------------------------

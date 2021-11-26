@@ -62,5 +62,7 @@ if __name__ == "__main__":
     if  arguments.file_slm is not None:
         print("-    apply a mask over land and smooth")
         function_ocean_landmask(finout=file_output, fslm2d=file_slm, fgriddes=pism_grid)
+    elif arguments.file_slm is None:
+        print("- no mask over land")
 
     os.system("rm  ocean_file_for_ice.nc")
