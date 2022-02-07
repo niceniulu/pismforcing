@@ -210,6 +210,7 @@ def glacial_index_main_atmosphere_file_for_PISM(theyear=None,
                                                 binary_dEBM='./dEBMmain',
                                                 time_frequency='12month',
                                                 PISM_lakestore=False,
+                                                kyr_dEBM=None,
                                                 **opt):  ## other defines, but not used
 
     print()
@@ -223,10 +224,16 @@ def glacial_index_main_atmosphere_file_for_PISM(theyear=None,
     #----- make new ECHAM6 file based on the index
     print()
     print("I:       Generate dummy ECHAM6 file based on the index: ", index ,"\n")
-    year_kyr = theyear/1000.
+    if kyr_dEBM is None:
+        year_kyr = theyear/1000.
+    else:
+        year_kyr = kyr_dEBM
+
     print("         year in kyr:", year_kyr)
     print()
+
     obliquity = modify_data_ECHAM6(year_kyr, index, ECHAM6_file_ref0, ECHAM6_file_ref1, "dummy_ECHAM6.nc")
+
     print("I:        The obliquity used for dEBM is: ", obliquity )
 
     #---------------------------------------------------------------

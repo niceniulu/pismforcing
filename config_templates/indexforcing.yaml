@@ -1,27 +1,27 @@
 IndexForcing:
     ###### index settings
-    refyear0: -50  # PI condition
-    refyear1: -21000  # LGM condition
-    index_file:  "/pf/a/a270075/workPalmod/pool/pism/ngrip_50yr_pism.nc"  # negative values 
-    index_varname:  "delta_o18"   # mandatory if the index_file is netcdf.
+    refyear0: 1  # PI condition
+    refyear1: 20000  # LGM condition
+    index_file:  "/home/ollie/lniu/workollie/AWICM-2.0/multistability-new/pism-overshoot/data/2_index/index_0.nc"  # negative values
+    index_varname:  "index"   # mandatory if the index_file is netcdf.
     index_interp_dt: 1
     index_errorrefyear: 0
 
-    #### atmosphere settings 
+    #### atmosphere settings
     atmos_downscale_interp: 'bil'
     atmos_lapserate_T: 'linear'
-    atmos_lapserate_T_value: -5  # K/km
+    atmos_lapserate_T_value: -6  # K/km
     atmos_lapserate_P: 'desertification'
-    ECHAM6_file_ref0: "/pf/a/a270075/workPalmod/pool/pism/climates/awiesm-2.1/PI_ctrl_awiesm-2.1_LR_2500-2599_echam_ymonmean.nc"
-    ECHAM6_file_ref1: "/pf/a/a270075/workPalmod/pool/pism/climates/awiesm-2.1/LGM_GLAC1D_Ctrl_001_2000-2088_echam_ymonmean.nc"
+    ECHAM6_file_ref0: "/home/ollie/lniu/workollie/AWICM-2.0/multistability-new/pism-overshoot/data/11Full/11Full_echam_2350-2399.nc"
+    ECHAM6_file_ref1: "/home/ollie/lniu/workollie/AWICM-2.0/multistability-new/pism-overshoot/data/1_for_pism/11Full_echam_2350-2399_overshoot.nc"
 
-    #### ocean settings 
-    ocean_couple: True 
-    ocean_file_dir: "/pf/a/a270075/workPalmod/pool/pism/climates/awiesm-2.1/"
-    ocean_filename_ref0:  "PI_ctrl_awiesm-2.1_LR_2500-2599_fesom_timmean.nc"  #"pi_fesom_awicm2.0_timmean_3547-3646.nc"  # "ref0.nc" 
-    ocean_filename_ref1:  "LGM_GLAC1D_Ctrl_001_2000-2088_fesom_timmean.nc"     #"LGM_fesom_awicm2.0_timmean_5399-5498.nc"   # "ref0.nc"  
+    #### ocean settings
+    ocean_couple: True
+    ocean_file_dir: "/home/ollie/lniu/workollie/AWICM-2.0/multistability-new/pism-overshoot/data/1_for_pism/"
+    ocean_filename_ref0:  "for_pism_11Full_fesom_2350-2399.nc"  #"pi_fesom_awicm2.0_timmean_3547-3646.nc"  # "ref0.nc"
+    ocean_filename_ref1:  "for_pism_11Full_fesom_2350-2399_overshoot.nc"     #"LGM_fesom_awicm2.0_timmean_5399-5498.nc"   # "ref0.nc"
     #
-    FESOM_interp: True  #True/False
+    FESOM_interp: False  #True/False
     FESOM_version: 2.0
     FESOM_file_ref0_mesh: "/pf/a/a270075/workPalmod/pool/awicm-2.0/meshes/mesh_CORE2_finaltopo_mean/"
     FESOM_file_ref0_mesh_abg:  [50, 15, -90]
@@ -31,15 +31,15 @@ IndexForcing:
     FESOM_depth_max: 500.
     FESOM_depth_min: 150.
     #
-    landseamask_file_ref0: "/pf/a/a270075/workPalmod/pool/pism/climates/awiesm-2.1/slm_PI_ctrl_awiesm-2.1_LR.nc" 
-    landseamask_file_ref1: "/pf/a/a270075/workPalmod/pool/pism/climates/awiesm-2.1/slm_LGM_GLAC1D_Ctrl.nc" 
-    
+    landseamask_file_ref0: "/pf/a/a270075/workPalmod/pool/pism/climates/awiesm-2.1/slm_PI_ctrl_awiesm-2.1_LR.nc"
+    landseamask_file_ref1: "/pf/a/a270075/workPalmod/pool/pism/climates/awiesm-2.1/slm_LGM_GLAC1D_Ctrl.nc"
+
     #### PISM settings
     PISM_version: "1.2"
     PISM_smb_scheme: 'dEBM' #'dEBM'/'PDD'
     PISM_ocean_switch: 'th'   #"pico" /'th'
-    PISM_file_griddes: "/pf/a/a270075/workPalmod/pool/pism/topg_20km_new/grids_20km_small.griddes"
+    PISM_file_griddes: "/home/ollie/lniu/workollie/AWICM-2.0/multistability-new/pool_pism/grids/nhem/pismr_nhem_20km.griddes"
     PISM_file_picobasins: #"/pf/a/a270075/workPalmod/pool/pism/basins/Basins_NH_20km_for_PICO.nc"
     #
-    binary_dEBM: '/pf/a/a270075/workPalmod/pism/dEBM/Fortran-v1.0/dEBMmain'
-
+    binary_dEBM: '/home/ollie/lniu/projects/smallwork/6_dEBM/dEBM/Fortran-v1.0/dEBMmain'
+    kyr_dEBM: -11   # use fixed obliquity for dEBM or not.  number/None

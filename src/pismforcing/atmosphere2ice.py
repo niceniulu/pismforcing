@@ -353,8 +353,13 @@ def generate_atmos_forcing_for_PISM(fin='downscaled.nc',
             ff = nc.Dataset(fout,'r+' )
             air_temp = ff.variables['air_temp']
             precip = ff.variables['precipitation']
+
             # ice surface temperature
-            tempice = np.where(air_temp[:]<273.15, air_temp[:], 273.15)
+            tempice = np.zeros(air_temp.shape)
+            tempice[:] = np.mean(air_temp,axis=0)
+            tempice = np.where(tempice[:]<273.15, tempice[:], 273.15)
+            #tempice = np.where(air_temp[:]<273.15, air_temp[:], 273.15)
+
             # runoff (no ice mask)
             runoff = precip[:] - smb[:]
 
