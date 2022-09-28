@@ -13,3 +13,5 @@ __pycache__/
 .cache
 
 tests/
+src/pismforcing/.ipynb_checkpoints/
+
