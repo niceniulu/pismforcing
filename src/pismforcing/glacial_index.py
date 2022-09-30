@@ -15,7 +15,7 @@ import matplotlib.pyplot as plt
 
 ## import own packages
 from . import select_vars_for_PISM, downscale_ECHAM2PISMgrids, run_dEBM, generate_atmos_forcing_for_PISM
-from . import function_FESOM2ice, function_ocean2PISM, function_ocean_landmask
+from . import function_FESOM2ice, function_ocean2PISM, function_ocean_landmask, function_FESOM2ice_regular_grid
 
 
 ###############################################################################
@@ -72,7 +72,8 @@ def main_index_forcing_file(theyear, fpism,  **settings):
                 print("..... PISM_file_ocean_forcing_ref0:",settings['PISM_file_ocean_forcing_ref0'],  \
                                     "PISM_file_ocean_forcing_ref1:", settings['PISM_file_ocean_forcing_ref1']," NOT exits")
                 print("         FESOM file has to be interpolate to PISM grids for the first step >>>>> ")
-                initial_FESOM2PISMgrids(**settings)
+                #initial_FESOM2PISMgrids(**settings)
+                initial_FESOM2PISMgrids_version2(**settings)
                 #
             ff_ref0 = settings['PISM_file_ocean_forcing_ref0']
             ff_ref1 = settings['PISM_file_ocean_forcing_ref1']
@@ -518,3 +519,40 @@ def initial_FESOM2PISMgrids(**opts):
     os.system("rm  ocean_file_for_ice_ref0.nc  ocean_file_for_ice_ref1.nc  ")
     print("I:       Done. ")
     return
+
+
+
+
+def initial_FESOM2PISMgrids_version2(**opts):
+    #output:   opts['PISM_file_ocean_forcing_ref0']
+    #          opts['PISM_file_ocean_forcing_ref1']
+    print()
+    print("I:       For initial: Interpolate FESOM file to PISM grids. ")
+    print("I:       The defined settings: ")
+    for aa, bb in opts.items():
+        print("         ",aa,"=====>",bb)
+        
+    # get the ref0 file
+    print("I:       Processing the ref0 data ")
+    function_FESOM2ice_regular_grid(version_FESOM=opts['FESOM_version'],
+                meshpath=opts['FESOM_file_ref0_mesh'] , abg=opts['FESOM_file_ref0_mesh_abg'],
+                findir=opts['ocean_file_dir'], fout='ocean_file_for_ice_ref0.nc',
+                depthmax=opts['FESOM_depth_max'], depthmin=opts['FESOM_depth_min'], 
+                fnameonly=opts['ocean_filename_ref0'] )
+    function_ocean2PISM(fin='ocean_file_for_ice_ref0.nc',ficegrid=opts['PISM_file_griddes'], fout=opts['PISM_file_ocean_forcing_ref0'],
+                switch_PISM=opts['PISM_ocean_switch'], version_PISM=opts['PISM_version'],fpicobasin=opts['PISM_file_picobasins'] )
+    
+    # get the ref1 file
+    print("I:       Processing the ref1 data ")
+    function_FESOM2ice_regular_grid(version_FESOM=opts['FESOM_version'],
+                meshpath=opts['FESOM_file_ref1_mesh'] , abg=opts['FESOM_file_ref1_mesh_abg'],
+                findir=opts['ocean_file_dir'], fout='ocean_file_for_ice_ref1.nc',
+                depthmax=opts['FESOM_depth_max'], depthmin=opts['FESOM_depth_min'], 
+                fnameonly=opts['ocean_filename_ref1'] )
+    function_ocean2PISM(fin='ocean_file_for_ice_ref1.nc',ficegrid=opts['PISM_file_griddes'], fout=opts['PISM_file_ocean_forcing_ref1'],
+                switch_PISM=opts['PISM_ocean_switch'], version_PISM=opts['PISM_version'],fpicobasin=opts['PISM_file_picobasins'] )
+
+    #clean intermeidate files
+    os.system("rm  ocean_file_for_ice_ref0.nc  ocean_file_for_ice_ref1.nc  ")
+    print("I:       Done. ")
+    return 

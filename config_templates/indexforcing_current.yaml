@@ -1,0 +1,45 @@
+IndexForcing:
+    ###### index settings
+    refyear0: -50  # PI condition
+    refyear1: -21000  # LGM condition
+    index_file:  "/home/a/a270075/ba0989/pool/pism/ngrip_50yr_pism.nc"  # negative values
+    index_varname:  "delta_o18"   # mandatory if the index_file is netcdf.
+    index_interp_dt: 1
+    index_errorrefyear: 0
+
+    #### atmosphere settings
+    atmos_downscale_interp: 'bil'
+    atmos_lapserate_T: 'linear'
+    atmos_lapserate_T_value: -5  # K/km
+    atmos_lapserate_P: 'desertification'
+    ECHAM6_file_ref0: "/home/a/a270075/ba0989/pool/pism/climates/pi_awicm2.0_echam_3547-3646_ymonmean_new.nc"
+    ECHAM6_file_ref1: "/home/a/a270075/ba0989/pool/pism/climates/LGM_echam_awicm2.0_ymonmean_5400-5498_new.nc"
+
+    #### ocean settings
+    ocean_couple: True
+    ocean_file_dir: "/home/a/a270075/ba0989/pool/pism/climates/"
+    ocean_filename_ref0:  "pi_fesom_awicm2.0_timmean_3547-3646.nc"  # "ref0.nc"
+    ocean_filename_ref1:  "LGM_fesom_awicm2.0_timmean_5399-5498_new.nc"   # "ref0.nc"
+    #
+    FESOM_interp: True  #True/False
+    FESOM_version: 2.0
+    FESOM_file_ref0_mesh: "/work/ba0989/a270075/pool/meshes/awicm-2.0/mesh_CORE2_finaltopo_mean/"
+    FESOM_file_ref0_mesh_abg:  [50, 15, -90]
+    FESOM_file_ref1_mesh: "/work/ba0989/a270075/pool/meshes/awicm-2.0/awicm2_lgm6gn//"   # mesh_CORE2_GLAC1D_LGM/"
+    FESOM_file_ref1_mesh_abg:  [50, 15, -90]  #  [0, 0, 0]   #
+    FESOM_ntimeperfile: 1
+    FESOM_depth_max: 300.   #500.
+    FESOM_depth_min: 150.
+    #
+    #landseamask_file_ref0: "/work/ba0989/a270075/pool/pism/climates/awiesm-2.1/slm_PI_ctrl_awiesm-2.1_LR.nc"
+    #landseamask_file_ref1: "/work/ba0989/a270075/pool/pism/climates/awiesm-2.1/slm_LGM_GLAC1D_Ctrl.nc"
+
+    #### PISM settings
+    PISM_version: "1.2"
+    PISM_smb_scheme: 'dEBM' #'dEBM'/'PDD'
+    PISM_ocean_switch: 'pico'   #"pico" /'th'
+    PISM_file_griddes: "/home/a/a270075/ba0989/pool/pism/grids/nhem/pismr_nhem_20km.griddes"
+    PISM_file_picobasins: "/home/a/a270075/ba0989/pool/pism/basins/Basins_NH_20km_for_PICO.nc"
+    PISM_lakestore: True    #False / True
+    #
+    binary_dEBM: '/home/a/a270075/model_codes/pism/dEBM/Fortran-v1.0/dEBMmain'
