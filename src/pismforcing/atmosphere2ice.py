@@ -294,6 +294,15 @@ def run_dEBM(fin='downscaled.nc',
     fnml.write("time_varname='time'\n")
     fnml.write("stddev=3.5\n")
     fnml.write("obliquity=" + str(obliquity) + "\n")
+    fnml.write("cloud_bias=0.155\n")
+    fnml.write("Ans    = .845\n")
+    fnml.write("Ads    = .73\n")
+    fnml.write("Aws    = .55\n")
+    fnml.write("tau_cs = .75\n")
+    fnml.write("residual    = 0\n")
+    fnml.write("hydmth_str=10\n")
+
+
     fnml.write("/\n")
     fnml.close()
 
